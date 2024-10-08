@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en-us">
   <head>
@@ -9,31 +10,6 @@
     <link rel="stylesheet" href="TemplateData/style.css">
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://cdn.rawgit.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-    <style>
-      body {
-        margin: 0;
-        overflow: hidden;
-      }
-
-      #unity-canvas {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 0; /* Unity canvas is below the A-Frame scene */
-        background-color: transparent; /* Force transparency */
-      }
-
-      a-scene {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 1; /* A-Frame scene above Unity canvas */
-      }
-    </style>
   </head>
   <body>
     <div id="unity-container">
@@ -55,8 +31,8 @@
       </div>
     </div>
 
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: true;"> <!-- Enable debug UI for testing -->
-      <a-marker preset="hiro" id="marker">
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+      <a-marker preset="hiro">
         <a-box position="0 0.5 0" material="color: red;"></a-box>
       </a-marker>
       <a-entity camera></a-entity>
@@ -76,18 +52,32 @@
       };
 
       var container = document.querySelector("#unity-container");
+      var canvas = document.querySelector("#unity-canvas");
+      var canvasContainer = document.querySelector("#unity-canvas-container");
       var loadingBar = document.querySelector("#unity-loading-bar");
       var progressBarFull = document.querySelector("#unity-progress-bar-full");
+      var fullscreenButton = document.querySelector("#unity-fullscreen-button");
       var unityInstance = null;
+      
+
+      canvasContainer.style.width = "960px";
+      canvasContainer.style.height = "600px";
+      loadingBar.style.display = "block";
 
       var script = document.createElement("script");
       script.src = loaderUrl;
       script.onload = () => {
-        createUnityInstance(document.querySelector("#unity-canvas"), config, (progress) => {
+        createUnityInstance(canvas, config, (progress) => {
           progressBarFull.style.width = 100 * progress + "%";
         }).then((instance) => {
           unityInstance = instance;
           loadingBar.style.display = "none";
+          if (fullscreenButton)
+          {
+            fullscreenButton.onclick = () => {
+              unityInstance.SetFullscreen(1);
+            };
+          }
         }).catch((message) => {
           alert(message);
         });
@@ -110,18 +100,6 @@
       enterVRButton.addEventListener('click', function (event) {
         unityInstance.Module.WebXR.toggleVR();
       }, false);
-
-      // Marker detection event
-      const marker = document.querySelector("#marker");
-      marker.addEventListener("markerFound", function () {
-        console.log("Marker found!");
-        // Optionally trigger an interaction with Unity here
-      });
-
-      marker.addEventListener("markerLost", function () {
-        console.log("Marker lost!");
-        // Handle the loss of the marker, such as hiding the box
-      });
     </script>
 
   </body>

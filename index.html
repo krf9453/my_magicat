@@ -33,13 +33,13 @@
     <!-- AR.js Scene and Marker -->
     <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
       <!-- WebXR Camera -->
-      <!-- <a-entity camera></a-entity> -->
+      <a-entity camera></a-entity> 
 
       <!-- Define a marker using a custom pattern (.patt file) -->
       <a-marker preset="hiro">
+        <a-box position="0 0.5 0" material="color: red;"></a-box>
         <!-- Load your Unity-exported GLB model (the 2D sprite) -->
-        <a-entity gltf-model="cat.glb" position=".25 1.23 12.13" scale="0.3462 0.3462 0.3462">
-        </a-entity>
+        <!--  <a-entity gltf-model="cat.glb" position=".25 1.23 12.13" scale="0.3462 0.3462 0.3462"> </a-entity> -->
       </a-marker>
     </a-scene>
 

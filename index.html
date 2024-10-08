@@ -1,43 +1,52 @@
 <!DOCTYPE html>
-<html lang="en-us">
+<html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity WebGL Player | My project</title>
-    <meta name="description" content="">
-    <link rel="shortcut icon" href="TemplateData/favicon.ico">
-    <link rel="stylesheet" href="TemplateData/style.css">
-    <!-- Include A-Frame and AR.js libraries -->
+    <meta charset="UTF-8">
+    <title>AR + Unity Integration</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://cdn.rawgit.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>3
+    <script src="https://cdn.rawgit.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+
+      #unity-canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1; /* Ensure Unity canvas is above A-Frame scene */
+        background-color: transparent; /* Force transparency */
+      }
+
+      #aframe-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0; /* Ensure A-Frame scene is below Unity canvas */
+      }
+    </style>
   </head>
   <body>
-    <div id="unity-container">
-      <div id="unity-canvas-container">
-        <canvas id="unity-canvas" style="width: 100%; height: 100%;"></canvas>
-      </div>
-      <div id="unity-loading-bar">
-        <div id="unity-logo"></div>
-        <div id="unity-progress-bar-empty">
-          <div id="unity-progress-bar-full"></div>
-        </div>
-      </div>
-      <div id="unity-footer">
-        <div id="unity-webgl-logo"></div>
-        <button id="entervr" value="Enter VR" disabled>VR</button>
-        <button id="enterar" value="Enter AR" disabled>AR</button>
-        <div id="unity-webxr-link">Using <a href="https://github.com/De-Panther/unity-webxr-export" target="_blank" title="WebXR Export">WebXR Export</a></div>
-        <div id="unity-build-title">My project</div>
-      </div>
+    <!-- A-Frame AR.js Scene -->
+    <div id="aframe-container">
+      <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+        <a-marker preset="hiro">
+          <a-box position="0 0.5 0" material="color: red;"></a-box>
+        </a-marker>
+        <a-entity camera></a-entity>
+      </a-scene>
     </div>
 
-    <!-- AR.js Scene and Marker -->
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
-      <a-marker preset="hiro">
-        <a-box position="0 0.5 0" material="color: red;"></a-box>
-      </a-marker>
-      <a-entity camera></a-entity>
-    </a-scene>
+    <!-- Unity WebGL Canvas -->
+    <div id="unity-container">
+      <canvas id="unity-canvas"></canvas>
+    </div>
 
     <script>
       var buildUrl = "Build";
@@ -50,74 +59,30 @@
         companyName: "DefaultCompany",
         productName: "My project",
         productVersion: "0.1",
+        webglContextAttributes: {
+          alpha: true // Ensures the WebGL context supports transparency
+        }
       };
 
       var container = document.querySelector("#unity-container");
       var canvas = document.querySelector("#unity-canvas");
-      var canvasContainer = document.querySelector("#unity-canvas-container");
-      var loadingBar = document.querySelector("#unity-loading-bar");
-      var progressBarFull = document.querySelector("#unity-progress-bar-full");
-      var fullscreenButton = document.querySelector("#unity-fullscreen-button");
       var unityInstance = null;
-      
-
-      canvasContainer.style.width = "960px";
-      canvasContainer.style.height = "600px";
-      loadingBar.style.display = "block";
 
       var script = document.createElement("script");
       script.src = loaderUrl;
       script.onload = () => {
         createUnityInstance(canvas, config, (progress) => {
-          progressBarFull.style.width = 100 * progress + "%";
+          // Optional: Update any loading progress here
         }).then((instance) => {
           unityInstance = instance;
-          loadingBar.style.display = "none";
-          if (fullscreenButton)
-          {
-            fullscreenButton.onclick = () => {
-              unityInstance.SetFullscreen(1);
-            };
-          }
         }).catch((message) => {
           alert(message);
         });
       };
       document.body.appendChild(script);
-
-      let enterARButton = document.getElementById('enterar');
-      let enterVRButton = document.getElementById('entervr');
-
-      document.addEventListener('onARSupportedCheck', function (event) {
-        enterARButton.disabled = !event.detail.supported;
-      }, false);
-      document.addEventListener('onVRSupportedCheck', function (event) {
-        enterVRButton.disabled = !event.detail.supported;
-      }, false);
-
-      enterARButton.addEventListener('click', function (event) {
-        unityInstance.Module.WebXR.toggleAR();
-      }, false);
-      enterVRButton.addEventListener('click', function (event) {
-        unityInstance.Module.WebXR.toggleVR();
-      }, false);
-
-      marker.addEventListener('markerFound', function () {
-        console.log("Marker detected");
-        // Call Unity to interact with the cat when the marker is detected
-        unityInstance.SendMessage('cat', 'OnflowerMarkerDetected');
-      });
-
-      marker.addEventListener('markerLost', function () {
-        console.log("Marker lost");
-        // Call Unity when the marker is lost
-        unityInstance.SendMessage('cat', 'OnflowerMarkerLost');
-      });
     </script>
-
-
-
   </body>
 </html>
+
 
 

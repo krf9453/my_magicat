@@ -31,9 +31,18 @@
       </div>
     </div>
 
+    <!-- AR.js Scene and Marker -->
+    <a-scene embedded arjs="sourceType: webcam;">
+      <!-- WebXR Camera -->
+      <a-entity camera></a-entity>
 
-   
-
+      <!-- Define a marker using a custom pattern (.patt file) -->
+      <a-marker type="pattern" url="lilflower.patt" id="flowermarker">
+        <!-- Load your Unity-exported GLB model (the 2D sprite) -->
+        <a-entity gltf-model="cat.glb" position=".25 1.23 12.13" scale="0.3462 0.3462 0.3462">
+        </a-entity>
+      </a-marker>
+    </a-scene>
 
     <script>
       var buildUrl = "Build";
@@ -48,7 +57,6 @@
         productVersion: "0.1",
       };
 
-
       var container = document.querySelector("#unity-container");
       var canvas = document.querySelector("#unity-canvas");
       var canvasContainer = document.querySelector("#unity-canvas-container");
@@ -56,13 +64,11 @@
       var progressBarFull = document.querySelector("#unity-progress-bar-full");
       var fullscreenButton = document.querySelector("#unity-fullscreen-button");
       var unityInstance = null;
-     
-
+      
 
       canvasContainer.style.width = "960px";
       canvasContainer.style.height = "600px";
       loadingBar.style.display = "block";
-
 
       var script = document.createElement("script");
       script.src = loaderUrl;
@@ -84,10 +90,8 @@
       };
       document.body.appendChild(script);
 
-
       let enterARButton = document.getElementById('enterar');
       let enterVRButton = document.getElementById('entervr');
-
 
       document.addEventListener('onARSupportedCheck', function (event) {
         enterARButton.disabled = !event.detail.supported;
@@ -96,7 +100,6 @@
         enterVRButton.disabled = !event.detail.supported;
       }, false);
 
-
       enterARButton.addEventListener('click', function (event) {
         unityInstance.Module.WebXR.toggleAR();
       }, false);
@@ -104,28 +107,21 @@
         unityInstance.Module.WebXR.toggleVR();
       }, false);
 
+      // AR.js marker detection events
+      var flowermarker = document.querySelector("#flowermarker");
 
-      marker.addEventListener('markerFound', function () {
+      flowermarker.addEventListener("markerFound", (event) => {
         console.log("Marker detected");
-        // Call Unity to interact with the cat when the marker is detected
         unityInstance.SendMessage('cat', 'OnflowerMarkerDetected');
       });
-
-
-      marker.addEventListener('markerLost', function () {
+      
+      flowermarker.addEventListener("markerLost", (event) => {
         console.log("Marker lost");
-        // Call Unity when the marker is lost
         unityInstance.SendMessage('cat', 'OnflowerMarkerLost');
       });
     </script>
 
 
 
-
-
-
   </body>
 </html>
-
-
-

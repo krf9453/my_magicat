@@ -1,30 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR.js Test</title>
-
-    <!-- Include A-Frame and AR.js libraries -->
+    <title>AR.js Marker Test</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://rawgit.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
   </head>
-
   <body style="margin: 0; overflow: hidden;">
-    
-    <!-- AR.js Scene -->
     <a-scene embedded arjs="sourceType: webcam;">
-      
-      <!-- Marker for testing (Hiro marker) -->
+      <!-- Marker with a simple box -->
       <a-marker preset="hiro">
-        <!-- Simple Cube to appear when the marker is detected -->
         <a-box position="0 0.5 0" material="color: red;"></a-box>
       </a-marker>
-      
-      <!-- Camera Entity -->
+      <!-- Camera -->
       <a-entity camera></a-entity>
-    
     </a-scene>
-
   </body>
 </html>

@@ -7,8 +7,10 @@
     <meta name="description" content="">
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
+    <!-- Include A-Frame and AR.js libraries -->
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://cdn.rawgit.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    
   </head>
   <body>
     <div id="unity-container">
@@ -31,15 +33,15 @@
     </div>
 
     <!-- AR.js Scene and Marker -->
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+    <a-scene embedded arjs="sourceType: webcam;">
       <!-- WebXR Camera -->
-      <a-entity camera></a-entity> 
+      <a-entity camera></a-entity>
 
       <!-- Define a marker using a custom pattern (.patt file) -->
       <a-marker preset="hiro">
-        <a-box position="0 0.5 0" material="color: red;"></a-box>
         <!-- Load your Unity-exported GLB model (the 2D sprite) -->
-        <!--  <a-entity gltf-model="cat.glb" position=".25 1.23 12.13" scale="0.3462 0.3462 0.3462"> </a-entity> -->
+        <a-entity gltf-model="cat.glb" position=".25 1.23 12.13" scale="0.3462 0.3462 0.3462">
+        </a-entity>
       </a-marker>
     </a-scene>
 
@@ -109,16 +111,19 @@
       // AR.js marker detection events
       var marker = document.querySelector('a-marker');
 
-
-      marker.addEventListener("markerFound", (event) => {
+      marker.addEventListener('markerFound', function () {
         console.log("Marker detected");
+        // Call Unity to interact with the cat when the marker is detected
         unityInstance.SendMessage('cat', 'OnflowerMarkerDetected');
       });
-      
-      marker.addEventListener("markerLost", (event) => {
+
+
+      marker.addEventListener('markerLost', function () {
         console.log("Marker lost");
+        // Call Unity when the marker is lost
         unityInstance.SendMessage('cat', 'OnflowerMarkerLost');
       });
+
     </script>
 
 

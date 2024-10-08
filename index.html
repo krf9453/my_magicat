@@ -115,7 +115,7 @@
         console.log("Marker detected");
         unityInstance.SendMessage('cat', 'OnflowerMarkerDetected');
       });
-
+      
       flowermarker.addEventListener("markerLost", (event) => {
         console.log("Marker lost");
         unityInstance.SendMessage('cat', 'OnflowerMarkerLost');

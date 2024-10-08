@@ -7,6 +7,8 @@
     <meta name="description" content="">
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://cdn.rawgit.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
   </head>
   <body>
     <div id="unity-container">
@@ -27,6 +29,14 @@
         <div id="unity-build-title">My project</div>
       </div>
     </div>
+
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+      <a-marker preset="hiro">
+        <a-box position="0 0.5 0" material="color: red;"></a-box>
+      </a-marker>
+      <a-entity camera></a-entity>
+    </a-scene>
+
     <script>
       var buildUrl = "Build";
       var loaderUrl = buildUrl + "/build magicat.loader.js";
@@ -90,5 +100,6 @@
         unityInstance.Module.WebXR.toggleVR();
       }, false);
     </script>
+
   </body>
 </html>

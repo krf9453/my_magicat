@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AR.js Marker Test</title>
-    
+    <title>AR.js Test</title>
+
     <!-- Include A-Frame and AR.js libraries -->
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://rawgit.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
@@ -13,31 +13,18 @@
   <body style="margin: 0; overflow: hidden;">
     
     <!-- AR.js Scene -->
-    <a-scene embedded arjs='sourceType: webcam;'>
-
-      <!-- Define a marker using a built-in marker (Hiro for testing) -->
+    <a-scene embedded arjs="sourceType: webcam;">
+      
+      <!-- Marker for testing (Hiro marker) -->
       <a-marker preset="hiro">
-        <!-- Create a simple red box to appear when marker is detected -->
+        <!-- Simple Cube to appear when the marker is detected -->
         <a-box position="0 0.5 0" material="color: red;"></a-box>
       </a-marker>
-
+      
       <!-- Camera Entity -->
       <a-entity camera></a-entity>
     
     </a-scene>
-
-    <script>
-      // Log when the marker is detected or lost
-      document.querySelector("a-marker").addEventListener("markerFound", () => {
-        console.log("Marker found!");
-        alert("Marker detected!");
-      });
-      
-      document.querySelector("a-marker").addEventListener("markerLost", () => {
-        console.log("Marker lost!");
-        alert("Marker lost!");
-      });
-    </script>
 
   </body>
 </html>

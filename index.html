@@ -113,6 +113,7 @@
 
       flowermarker.addEventListener("markerFound", (event) => {
         console.log("Marker detected");
+        alert("Marker detected!");
         unityInstance.SendMessage('cat', 'OnflowerMarkerDetected');
       });
       
